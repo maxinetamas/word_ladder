@@ -63,7 +63,7 @@ def verify_word_ladder(ladder):
     False
     '''
     for i in enumerate(ladder):
-        if _adjacent(ladder[i], ladder[i + 1]) == False:
+        if not _adjacent(ladder[i], ladder[i + 1]):
             return False
     return True
 
