@@ -1,5 +1,5 @@
 #!/bin/python3
-
+from collections import deque
 
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
@@ -32,14 +32,14 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     stack.push(start_word)
     queue = deque([])
     queue = deque([stack])
-    
+
     while len(queue) != 0:
         while queue:
             curr_stack = queue.popleft()
             curr_word = curr_stack[-1]
             for i in range(len(curr_word)):
                 for j in "abcdefghijklmnopqrstuvwxyz":
-                    new_word = curr_word[:i] + j + curr_word[i+1:]
+                    new_word = curr_word[:i] + j + curr_word[i + 1:]
                     if new_word == end_word:
                         return curr_stack + [new_word]
                     stack_copy = curr_stack + [new_word]
