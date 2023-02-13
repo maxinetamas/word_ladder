@@ -1,6 +1,7 @@
 #!/bin/python3
 from collections import deque
 
+
 def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     '''
     Returns a list satisfying the following properties:
@@ -62,9 +63,9 @@ def verify_word_ladder(ladder):
     False
     '''
     for i in enumerate(ladder):
-        if adjacent(enumerate[i], enumerate[i + 1]) == False:
+        if _adjacent(ladder[i], ladder[i + 1]) == False:
             return False
-    return True 
+    return True
 
 
 def _adjacent(word1, word2):
