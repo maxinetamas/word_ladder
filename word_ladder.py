@@ -30,26 +30,32 @@ def word_ladder(start_word, end_word, dictionary_file='words5.dict'):
     the function returns `None`.
     '''
     stack = []
-    stack.push(start_word)
+    stack.append(start_word)
     queue = deque([])
     queue = deque([stack])
+    used_words = set()
 
-    while len(queue) != 0:
-        while queue:
-            curr_stack = queue.popleft()
-            curr_word = curr_stack[-1]
-            for i in range(len(curr_word)):
-                for j in "abcdefghijklmnopqrstuvwxyz":
-                    new_word = curr_word[:i] + j + curr_word[i + 1:]
-                    if new_word == end_word:
-                        return curr_stack + [new_word]
-                    stack_copy = curr_stack + [new_word]
-                    queue.append(stack_copy)
-
+    if len(start_word) != len(end_word):
+        return None
     if start_word == end_word:
         return [start_word]
 
-    return []
+    with open(dictionary_file) as f:
+        word_list = list(word.strip() for word in f)
+
+    while len(queue) != 0:
+        curr_stack = queue.popleft()
+        curr_word = curr_stack[-1]
+        for new_word in list(word_list):
+            if _adjacent(curr_word, new_word):
+                if new_word == end_word:
+                    return curr_stack + [new_word]
+                if new_word not in used_words:
+                    used_words.add(new_word)
+                    stack_copy = curr_stack + [new_word]
+                    queue.append(stack_copy)
+                    word_list.remove(new_word)
+    return None
 
 
 def verify_word_ladder(ladder):
@@ -62,7 +68,9 @@ def verify_word_ladder(ladder):
     >>> verify_word_ladder(['stone', 'shone', 'phony'])
     False
     '''
-    for i in enumerate(ladder):
+    if not ladder:
+        return False
+    for i in range(0, len(ladder) - 1):
         if not _adjacent(ladder[i], ladder[i + 1]):
             return False
     return True
@@ -80,9 +88,13 @@ def _adjacent(word1, word2):
     '''
     count = 0
     if len(word1) == len(word2):
-        for i in enumerate(word1):
+        for i in range(0, len(word1)):
             if word1[i] != word2[i]:
                 count += 1
-    if count == 1:
+    else:
         return False
-    return True
+
+    if count == 1:
+        return True
+    else:
+        return False
